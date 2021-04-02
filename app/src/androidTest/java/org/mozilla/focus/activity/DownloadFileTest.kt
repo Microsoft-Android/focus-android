@@ -4,6 +4,7 @@
 package org.mozilla.focus.activity
 
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
+import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.GrantPermissionRule
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
@@ -75,7 +76,8 @@ class DownloadFileTest {
         } catch (e: IOException) {
             throw AssertionError("Could not stop web server", e)
         }
-        deleteFileUsingDisplayName(mActivityTestRule.activity.applicationContext, "download.jpg")
+        val context = InstrumentationRegistry.getInstrumentation().targetContext.applicationContext
+        deleteFileUsingDisplayName(context, "download.jpg")
     }
 
     @Test
@@ -89,7 +91,7 @@ class DownloadFileTest {
         }.loadPage(downloadPageUrl) { }
 
         downloadRobot {
-            downloadIconAsset.click()
+            clickDownloadIconAsset()
             // If permission dialog appears, grant it
             if (TestHelper.permAllowBtn.waitForExists(waitingTime)) {
                 TestHelper.permAllowBtn.click()
@@ -111,7 +113,7 @@ class DownloadFileTest {
         }.loadPage(downloadPageUrl) { }
 
         downloadRobot {
-            downloadIconAsset.click()
+            clickDownloadIconAsset()
             // If permission dialog appears, grant it
             if (TestHelper.permAllowBtn.waitForExists(waitingTime)) {
                 TestHelper.permAllowBtn.click()
@@ -131,7 +133,7 @@ class DownloadFileTest {
         }.loadPage(downloadPageUrl) { }
 
         downloadRobot {
-            downloadIconAsset.click()
+            clickDownloadIconAsset()
             // If permission dialog appears, grant it
             if (TestHelper.permAllowBtn.waitForExists(waitingTime)) {
                 TestHelper.permAllowBtn.click()

@@ -38,7 +38,7 @@ gcloud:
   performance-metrics: true
 
   test-targets:
-    - class org.mozilla.focus.activity.DownloadFileTest
+    - class org.mozilla.focus.activity.DownloadFileTest#downloadNotificationTest
     # - package org.mozilla.focus.screenshots
 
   device:

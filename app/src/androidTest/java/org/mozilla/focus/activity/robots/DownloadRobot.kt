@@ -6,8 +6,8 @@ import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
 import androidx.test.uiautomator.UiObject
 import androidx.test.uiautomator.UiSelector
-import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
+import org.mozilla.focus.helpers.SessionLoadedIdlingResource
 import org.mozilla.focus.helpers.TestHelper.appName
 import org.mozilla.focus.helpers.TestHelper.isPackageInstalled
 import org.mozilla.focus.helpers.TestHelper.mDevice
@@ -15,22 +15,24 @@ import org.mozilla.focus.helpers.TestHelper.waitingTime
 import org.mozilla.focus.helpers.TestHelper.webPageLoadwaitingTime
 
 class DownloadRobot {
-    val downloadIconAsset: UiObject = mDevice.findObject(
-        UiSelector()
-            .resourceId("download")
-            .enabled(true)
-    )
-
     fun verifyDownloadDialog(fileName: String) {
         assertTrue(downloadDialogTitle.waitForExists(waitingTime))
         assertTrue(downloadCancelBtn.exists())
         assertTrue(downloadBtn.exists())
-        assertEquals(downloadFileName.text, fileName)
+        assertTrue(downloadFileName.text.contains(fileName))
     }
 
     fun verifyDownloadDialogGone() = assertTrue(downloadDialogTitle.waitUntilGone(waitingTime))
 
     fun verifyPhotosOpens() = assertPhotosOpens()
+
+    fun clickDownloadIconAsset() {
+        val sessionLoadedIdlingResource = SessionLoadedIdlingResource()
+        runWithIdleRes(sessionLoadedIdlingResource) {
+            downloadIconAsset.waitForExists(webPageLoadwaitingTime)
+            downloadIconAsset.click()
+        }
+    }
 
     fun clickDownloadButton() {
         downloadBtn.waitForExists(waitingTime)
@@ -55,6 +57,12 @@ fun downloadRobot(interact: DownloadRobot.() -> Unit): DownloadRobot.Transition 
     DownloadRobot().interact()
     return DownloadRobot.Transition()
 }
+
+val downloadIconAsset: UiObject = mDevice.findObject(
+    UiSelector()
+        .resourceId("download")
+        .enabled(true)
+)
 
 private val downloadDialogTitle = mDevice.findObject(
     UiSelector()

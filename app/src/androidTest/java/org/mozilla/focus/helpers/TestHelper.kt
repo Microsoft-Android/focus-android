@@ -50,9 +50,7 @@ object TestHelper {
 
     fun verifySnackBarText(text: String) {
         val snackbarText = mDevice.findObject(
-            UiSelector()
-                .resourceId("$appName:id/snackbar_text")
-                .enabled(true)
+            UiSelector().resourceId("$appName:id/snackbar_text")
         )
         snackbarText.waitForExists(waitingTime)
         assertTrue(snackbarText.text.contains(text))
